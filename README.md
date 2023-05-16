@@ -56,11 +56,12 @@ However these still do not prevent the predictions of $X$ from approaching zeros
     - f_loss: Given by the Physics Equation
     - $(\log m)^2$: Regularizer 
 
-    It's difficult the balance the influences among these terms (as the yield results are not desireable, and the model itself is difficult to fine-tune)
+    It's difficult the balance the influences among these terms (as the yielded results are not desireable, and the model itself is difficult to fine-tune)
 
 ## Possible Further Improvements
-1. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
-2. Handling issues addressed above (2 - 5)
+1. Increasing network's depth or width.
+2. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
+3. Handling issues addressed above (2 - 5)
 
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
 |PINN Predictions and Losses | PNN Predictions and Loss|
