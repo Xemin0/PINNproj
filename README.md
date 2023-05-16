@@ -15,6 +15,7 @@ $$A(X) = \frac{1}{3}\sqrt{x_1^2 + x_2^2}\cdot (-x_2, x_1, 0), \quad \phi(x) = \f
 Then
 
 $$B(X) = (\nabla\times A)(x) = (0,0,\sqrt{x_1^2 + x_2^2})$$
+
 $$E(X) = -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
 
 **For the Inverse Problem (identifying the values of $m$ and $q$) use argument `--inverseprob True` to set $m,q$ as traceable `jax.Array`**
