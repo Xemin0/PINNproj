@@ -13,11 +13,9 @@ where $$H(V,X) = \frac{1}{2}mV^T V + q\phi(X)$$
 The dynamics are tested with $m = 1, q = 1$ and initial state $Z_0 = (V_0,X_0) = (1, 0.5, 0.5, 1)$
 $$A(X) = \frac{1}{3}\sqrt{x_1^2 + x_2^2}\cdot (-x_2, x_1, 0), \quad \phi(x) = \frac{1}{100 \sqrt{x_1^2 + x_2^2}}$$
 Then
-~\begin{align*}B(X) &= (\nabla\times A)(x) = (0,0,\sqrt{x_1^2 + x_2^2}) \\
-E(X) &= -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}\end{align*}~
 
-$$B(X) &= (\nabla\times A)(x) = (0,0,\sqrt{x_1^2 + x_2^2})$$
-$$E(X) &= -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
+$$B(X) = (\nabla\times A)(x) = (0,0,\sqrt{x_1^2 + x_2^2})$$
+$$E(X) = -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
 
 **For the Inverse Problem (identifying the values of $m$ and $q$) use argument `--inverseprob True` to set $m,q$ as traceable `jax.Array`**
 
