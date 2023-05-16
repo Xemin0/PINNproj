@@ -25,9 +25,9 @@ The dynamics are tested with $m = 1, q = 1$ and initial state $Z_0 = (V_0,X_0) =
 $$A(X) = \frac{1}{3}\sqrt{x_1^2 + x_2^2}\cdot (-x_2, x_1, 0), \quad \phi(x) = \frac{1}{100 \sqrt{x_1^2 + x_2^2}}$$
 Then
 
-$$B(X) = (\nabla\times A)(x) = (0,0,\sqrt{x_1^2 + x_2^2})$$
+$$B(X) = (\nabla\times A)(X) = (0,0,\sqrt{x_1^2 + x_2^2})$$
 
-$$E(X) = -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
+$$E(X) = -(\nabla \phi)(X) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
 
 **For the Inverse Problem (identifying the values of $m$ and $q$) use argument `--inverseprob True` to set $m,q$ as traceable `jax.Array`**
 
@@ -48,9 +48,9 @@ PINN is essentially a DeepLearning based method. Itself does not strictly abides
 2. **Excluding the Singularity at the Origin**. The electric field is is not completely 'source-less' - its magnitude along with the potential value will go to infinity at the origin. Unlike numerical methods (i.g. ODE solver, integrator, Picard Iteration etc.), PINN won't be able to handle this abnormality (`nan`$*n =$`nan` just as $0 * n = n$??). Some possible solutions might be:    - Initialize the network's biases as non-zeros to avoid initial spatial values at origin
     - Value Clipping: replace zero state ($X = [0,0]$ - rows with all zeros) in the input with $epsilon = 1e-7$ (Must be differentiable for backpropogation; Better be Jittable for performances)
 However these still do not prevent the predictions of $X$ from approaching zeros. It may suggest that there should be a stronger constraints or penalty term to stop PINN from predicting trajectories that go through the origin
-3. Making sure $m$ Positive. Instead of directly predicting $m$, here we choose to predict $\log m$
-4. Avoiding $m$ and $q$ Going to Constant Zeros. $m=0,q=0$ will have the f_loss term trivially zero. To counter this a Regularization term calculated as the L-2 norm of $\log m$ is added to the loss function to drive the value of $\log m$ down around 0 (so that $m = e^{\log m}$ won't be 0)
-5. Determining the Weights for the Sum of the Loss Terms. Now this PINN has 4 different loss terms
+3. **Making sure $m$ Positive**. Instead of directly predicting $m$, here we choose to predict $\log m$
+4. **Avoiding $m$ and $q$ Going to Constant Zeros**. $m=0,q=0$ will have the f_loss term trivially zero. To counter this a Regularization term calculated as the L-2 norm of $\log m$ is added to the loss function to drive the value of $\log m$ down around 0 (so that $m = e^{\log m}$ won't be 0)
+5. **Determining the Weights for the Sum of the Loss Terms**. Now this PINN has 4 different loss terms
     - x_loss: MSE loss of $X$
     - v_loss: MSE loss of $V$
     - f_loss: Given by the Physics Equation
@@ -60,8 +60,8 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 
 ## Possible Further Improvements
 1. Increasing network's depth or width.
-2. For the Inverse Problem, train $m$, $q$ separately, using an extra optimizers - Self-Adaptive for the Optimization Process
-3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
+2. For the Inverse Problem, train $m$, $q$ separately, using extra optimizers - Self-Adaptive for the Optimization Process
+3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations, because of the intertwined relationships between $V$ and $X$
 4. Handling issues addressed above (2 - 5)
 
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
