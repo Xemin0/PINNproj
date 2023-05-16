@@ -25,7 +25,7 @@ $$E(X) = -(\nabla \phi)(x) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{
 
 
 ## About PINN for this Task
-Since PINN is essentially an approximation to a function governed by a system of PDEs or ODEs, and we are expected to predict the charged particle's trajectory (spatial location in terms of time), here we will use a linear neural network that uses time $t$ as input and spatial location $x$ as output to approximate the trajectory of interest, i.e. $$\mathcal{N}(t) \approx x(t)$$
+Since PINN is essentially an approximation to a function governed by a system of PDEs or ODEs, and we are expected to predict the charged particle's trajectory (spatial location in terms of time), here we will use a linear neural network (based on [Universal Approximation Theorem](https://en.wikipedia.org/wiki/Universal_approximation_theorem)) that uses time $t$ as input and spatial location $x$ as output to approximate the trajectory of interest, i.e. $$\mathcal{N}(t) \approx x(t)$$
 With initial conditions:
 $$\begin{align*}\dot{X}(0) &= V_0 \\
                 X(0)  &= X_0\end{align*}$$
