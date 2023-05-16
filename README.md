@@ -60,7 +60,7 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 
 ## Possible Further Improvements
 1. Increasing network's depth or width.
-2. For the Inverse Problem, train $m$, $q$ separately, using an extra optimizers
+2. For the Inverse Problem, train $m$, $q$ separately, using an extra optimizers - Self-Adaptive for the Optimization Process
 3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
 4. Handling issues addressed above (2 - 5)
 
