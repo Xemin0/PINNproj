@@ -57,4 +57,4 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
 |PINN Predictions and Losses | PNN Predictions and Loss|
 |:---:|:---:|
-| <img src="./images/PINN.png" height="500">|<img src="./images/PNN.png" height="500">|
+| <img src="./images/PINN.png" height="800">|<img src="./images/PNN.png" height="800">|
