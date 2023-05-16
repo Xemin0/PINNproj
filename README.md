@@ -60,8 +60,9 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 
 ## Possible Further Improvements
 1. Increasing network's depth or width.
-2. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
-3. Handling issues addressed above (2 - 5)
+2. For the Inverse Problem, train $m$, $q$ separately, using an extra optimizers
+3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations
+4. Handling issues addressed above (2 - 5)
 
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
 |PINN Predictions and Losses | PNN Predictions and Loss|
