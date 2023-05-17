@@ -29,7 +29,7 @@ parser.add_argument('--lbfgs', type = int, default = 0, help = 'Number of L-BFGS
 parser.add_argument('--savemodel', type = bool, default = False, help = 'Whether to save the trained model in JAX, default path = ./PINN_trained')
 parser.add_argument('--savefig', type = bool, default = False, help = 'Whether to save the plotted figures, default path = ./PredictionsLosses')
 parser.add_argument('--inverseprob', type = bool, default = True, help = 'Whether to solve the inverse problem inferring m and q')
-parser.add_argument('--lamda', type = str, default = '1.0, 2.0, 50.0', help = 'Weight Coefficients for PINN loss, x_loss, v_loss and f_loss')
+parser.add_argument('--lamda', type = str, default = '1.0, 1.0, 5.0', help = 'Weight Coefficients for PINN loss, x_loss, v_loss and f_loss')
 
 args = parser.parse_args()
 
@@ -82,17 +82,16 @@ layers = [1] + [50]*8 + [2]
 pinn_initial_params = init_network_params(layers, initializer = 'xavier_normal')
 
 if args.inverseprob:
-    logm = jax.random.normal(jax.random.PRNGKey(0), [1])
-    q = jax.random.normal(jax.random.PRNGKey(1), [1])
+    mq = jax.random.normal(jax.random.PRNGKey(0), [1])
 else:
-    logm = np.array([0.0])
-    q = np.array([1.0])
+    mq = np.array([1.0])
 
 
-all_initial_params = [*pinn_initial_params, *[logm, q]]
+# For the inverse problem include Mass-to-Charge Ratio in trainable variables
+all_initial_params = [*pinn_initial_params, *[mq]]
 
 # Check initialzied m and q
-print(f'\n{logm=}\nm={np.exp(logm)}\n{q=}')
+print(f'\n{mq=}')
 
 
 '''
@@ -116,7 +115,7 @@ if args.savemodel:
 '''
 Plotting Trajectory and Losses
 '''
-plot_trajectory_PINN(normalized_predict, updated_params[:-2], t, [x_train, x_train],\
+plot_trajectory_PINN(normalized_predict, updated_params[:-1], t, [x_train, x_train],\
                     lb, ub, text = f'{args.adam}Adams_{args.lbfgs}LBFGS', savefig = args.savefig)
 
 plot_losses(losses, semilogy = True, savefig = args.savefig)

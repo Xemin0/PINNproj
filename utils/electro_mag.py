@@ -61,10 +61,12 @@ def magnetic_force(v):
 #
 #  ** 1. To make sure mass m is positive we predict logm instead of m **
 #        While adding a Regularization term in the loss function to drive the value of logm down
+# ------------ UPDATED --------------
+# Instead of predicting m and q at the same time we will just predict the mass-to-charge ratio
 ### **** Need Element-Wise Derivatives ****
 '''
 @jit
-def f_lorentz(params, logm, q, t, lb, ub):
+def f_lorentz(params, mq, t, lb, ub):
     # Forward Wrapper of the Net to exclude unnecessary arguments
     # which will normalize the input
     def x_net(t):
@@ -91,6 +93,6 @@ def f_lorentz(params, logm, q, t, lb, ub):
     thus, instead of directly predicting the m, we will predict logm
     and to avoid large m, q values we will add a penalty term to drive their values down
     '''
-    residual = jnp.exp(logm) * a_pred - q * (electric_field(x_pred) + magnetic_force(v_pred))
+    residual = mq[0] * a_pred - (electric_field(x_pred) + magnetic_force(v_pred))
     #print('finished residual')
     return residual, x_pred, v_pred, a_pred

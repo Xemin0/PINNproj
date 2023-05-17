@@ -25,6 +25,8 @@ PINN Total Loss
 
 1. To make sure mass m is positive we predict logm instead of m,
    while adding a Regularization Term to drive the value of logm down 
+----- UPDATED ----
+Predict Mass-to-Charge Ratio mq instead
 '''
 @jit
 def total_PINN_loss(all_params, t, v_true, x_true,\
@@ -36,10 +38,10 @@ def total_PINN_loss(all_params, t, v_true, x_true,\
         - MSE(v_pred, v)
     '''
     # Unpack the parameters
-    params = all_params[:-2]
-    logm, q = all_params[-2:]
+    params = all_params[:-1]
+    mq = all_params[-1]
     # Forward pass of the Network
-    residual, x_pred, v_pred, _ = f_lorentz(params, logm, q, t, lb, ub)
+    residual, x_pred, v_pred, _ = f_lorentz(params, mq, t, lb, ub)
     
     x_loss = jnp.mean(jnp.sum((x_pred - x_true) ** 2, axis = 1))
     
@@ -49,8 +51,7 @@ def total_PINN_loss(all_params, t, v_true, x_true,\
     
     # Unpack the weights for the losses
     lamda_x, lamda_v, lamda_f = lamda
-    # Add a Regularization term for logm
-    return lamda_x * x_loss + lamda_v * v_loss + lamda_f * f_loss + 0.01* logm[0]**2,\
+    return lamda_x * x_loss + lamda_v * v_loss + lamda_f * f_loss,\
             (x_loss, v_loss, f_loss)
 
 
@@ -123,7 +124,7 @@ def trainPINN(all_params, t, lb, ub, data, lamda = (1.0, 1.0, 1.0),\
         loss_list['v_losses'].append(v_loss)
         loss_list['f_losses'].append(f_loss)
         
-        print(f'\r[TrainStep:{i+1}/{iter_adam}]\tTotalLoss:{total_loss:.5f}\tXLoss:{x_loss:.5f}\tVLoss:{v_loss:.5f}\tFLoss:{f_loss:.5f}\t[m,q] = [{np.exp(updated_params[-2].item()):.4f},{updated_params[-1].item():.4f}]', end = '')
+        print(f'\r[TrainStep:{i+1}/{iter_adam}]\tTotalLoss:{total_loss:.5f}\tXLoss:{x_loss:.5f}\tVLoss:{v_loss:.5f}\tFLoss:{f_loss:.5f}\tmq = {updated_params[-1].item():.5f}', end = '')
     print('\n' + '-'*40)
     
     ''' L-BFGS '''
@@ -140,7 +141,7 @@ def trainPINN(all_params, t, lb, ub, data, lamda = (1.0, 1.0, 1.0),\
         loss_list['v_losses'].append(v_loss)
         loss_list['f_losses'].append(f_loss)
         
-        print(f'\r[TrainStep:{i+1}/{iter_lbfgs}]\tTotalLoss:{total_loss:.5f}\tXLoss:{x_loss:.5f}\tVLoss:{v_loss:.5f}\tFLoss:{f_loss:.5f}\t[m,q] = [{np.exp(updated_params[-2].item()):.4f},{updated_params[-1].item():.4f}]', end = '')
+        print(f'\r[TrainStep:{i+1}/{iter_lbfgs}]\tTotalLoss:{total_loss:.5f}\tXLoss:{x_loss:.5f}\tVLoss:{v_loss:.5f}\tFLoss:{f_loss:.5f}\tmq = {updated_params[-1].item():.5f}', end = '')
     print('\n' + '-'*40)
     return updated_params, loss_list, opt_state
         
@@ -151,7 +152,7 @@ Plotting Subroutines
 ** Need to be adjusted ?? **
 '''
 def plot_trajectory_PINN(x_net, params, t, x_data,\
-                         lb, ub, text = 'Positional Predictions', savefig = False):
+                         lb, ub, text = 'PositionalPredictions', savefig = False):
     '''
     Plot the Predicted (Spatial) Trajectory (by PINN) against the Ground Truth one
     
@@ -237,7 +238,7 @@ def plot_trajectory_PINN(x_net, params, t, x_data,\
 
 from matplotlib import colormaps
 
-def plot_losses(losses, semilogy = False, text = 'All Losses of PINN',\
+def plot_losses(losses, semilogy = False, text = 'AllLossesofPINN',\
                     colormap = 'tab10', savefig = False):
     '''** Expect the input to be a dictionary **'''
     # Create a Figure
