@@ -63,7 +63,7 @@ In this inverse problem there is actually only one extra free variable - the Mas
 
 ## Possible Further Improvements
 1. Increasing network's depth or width.
-2. For the Inverse Problem, train $mq$ and the network's weight separately, using extra optimizers - Self-Adaptive or Adversarial Training for the Optimization Process
+2. **For the Inverse Problem, train $mq$ and the network's weight separately, using extra optimizers - Self-Adaptive or Adversarial Training for the Optimization Process, converting a Minimization Problem to a Min-Max Problem.**
 3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations, because of the intertwined relationships between $V$ and $X$
 4. Handling issues addressed above (2 - 5)
 
