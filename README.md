@@ -29,7 +29,7 @@ $$B(X) = (\nabla\times A)(X) = (0,0,\sqrt{x_1^2 + x_2^2})$$
 
 $$E(X) = -(\nabla \phi)(X) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{2}}}$$
 
-**For the Inverse Problem (identifying the values of $m$ and $q$) use argument `--inverseprob True` to set ~$m,q$ as traceable `jax.Array`~ $mq$ the Mass-to-Charge Ratio**
+**For the Inverse Problem (identifying the values of $m$ and $q$) use argument `--inverseprob True` to set $mq$ the Mass-to-Charge Ratio as traceable `jax.Array`**
 
 
 ## About PINN for this Task
@@ -63,7 +63,7 @@ In this inverse problem there is actually only one extra free variable - the Mas
 
 ## Possible Further Improvements
 1. Increasing network's depth or width.
-2. ~For the Inverse Problem, train $m$, $q$ separately, using extra optimizers - Self-Adaptive for the Optimization Process~
+2. For the Inverse Problem, train $mq$ and the network's weight separately, using extra optimizers - Self-Adaptive for the Optimization Process
 3. Predicting the complete phase flow $(V,X)$ with temporal input $t$ instead of predicting just the spatial locations, because of the intertwined relationships between $V$ and $X$
 4. Handling issues addressed above (2 - 5)
 
