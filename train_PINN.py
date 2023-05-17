@@ -29,7 +29,7 @@ parser.add_argument('--lbfgs', type = int, default = 0, help = 'Number of L-BFGS
 parser.add_argument('--savemodel', type = bool, default = False, help = 'Whether to save the trained model in JAX, default path = ./PINN_trained')
 parser.add_argument('--savefig', type = bool, default = False, help = 'Whether to save the plotted figures, default path = ./PredictionsLosses')
 parser.add_argument('--inverseprob', type = bool, default = True, help = 'Whether to solve the inverse problem inferring m and q')
-parser.add_argument('--lamda', type = str, default = '1.0, 1.0, 5.0', help = 'Weight Coefficients for PINN loss, x_loss, v_loss and f_loss')
+parser.add_argument('--lamda', type = str, default = '5.0,5.0,1.0', help = 'Weight Coefficients for PINN loss, x_loss, v_loss and f_loss')
 
 args = parser.parse_args()
 
