@@ -61,7 +61,7 @@ Overwrite the Train Steps for PINN
 
 Inputs:
     *** Data ***
-    - all_params         : [params, m, q] 
+    - all_params         : [params, mq] 
                            ### Use [*a, *b] to combine elements from list a and b ###
     - t                  : Inputs of shape (num_pts, 1)
     - lb                 : Lower bound of the input data (time t)
@@ -75,7 +75,7 @@ Inputs:
     - loss_fn            : Customized LossFunction for PINN
     
 Outputs:
-    - updated_params     : [params, m, q] 
+    - updated_params     : [params, mq] 
                            ## Need to be Unpacked before used for `normalized_predict` ##
     - loss_list          : A dictionary of all Train Losses
     - opt_state          : 

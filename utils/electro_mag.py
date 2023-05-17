@@ -55,9 +55,9 @@ def magnetic_force(v):
 #      - x of shape (batch_size, dims = 2)
 #
 # the Physics Eqn (ODE - Lorentz Force)
-# mx'' = qE + x' × B
+# mx''/q = E + x' × B
 #
-# Thus f_lorentz = mx'' - (qE + x' × B)
+# Thus f_lorentz = mx''/q - (E + x' × B)
 #
 #  ** 1. To make sure mass m is positive we predict logm instead of m **
 #        While adding a Regularization term in the loss function to drive the value of logm down
