@@ -61,7 +61,7 @@ However these still do not prevent the predictions of $X$ from approaching zeros
     - $pf_{loss}$                        : MSE(flow_pred, flow_true)$\cdot \lambda _0$
     - $f_{loss1} \cdot \lambda_1$               : based on $X_p$
     - $f_{loss2} \cdot \lambda_2$               : based on $V_p$
-    - $approx_{loss}$                    : MSE($V_p\,$, $X_p$') $\cdot \lambda _0$
+    - $approx_{loss}$                    : MSE($V_p$ , $X_p$') $\cdot \lambda _0$
 
 
     It's difficult the balance the influences among these terms (as the yielded results are not desireable, and the model itself is difficult to fine-tune)
