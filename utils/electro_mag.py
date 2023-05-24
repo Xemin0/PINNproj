@@ -96,3 +96,83 @@ def f_lorentz(params, mq, t, lb, ub):
     residual = mq[0] * a_pred - (electric_field(x_pred) + magnetic_force(v_pred))
     #print('finished residual')
     return residual, x_pred, v_pred, a_pred
+
+
+@jit
+def f_lorentzPhaseFlow(params, mq, t, lb, ub):
+    '''
+    # Forward Wrapper of the Net to exclude unncessary arguments
+    # which will normalize the input
+    # 
+    # flow_net(t) = (V_pred, X_pred)
+    #
+    ### For the inverse problem we willl predict the mass-to-charge ratio mq ###
+    '''
+    def flow_net(t):
+        return normalized_predict(params, t, lb, ub)
+    
+    # (V,X)_pred    = flow_net(t)
+    # (V', X')_pred = (V, X)_pred'
+    flow_pred, flow_pred_d1 = value_and_egrad(flow_net, t)
+    # (V'', X'')_pred = (V, X)_pred''
+    _, flow_pred_d2 = value_and_vec_ehessian(flow_net, t)
+    
+    ######### _t for Ground Truth, _p for Predictions
+    #               V_t, X_t = flow_true
+    #               V_p, X_p = flow_pred
+    #        V_p' , X_p'
+    # V_p'', X_p''     
+    #
+    ######### 
+    # So here we will return two residual f_loss1(X_p), f_loss2(V_p)
+    # V_p = flow_pred[ : dim ] ; X_p = flow_pred[-dim : ]
+    #
+    # residual = LHS - RHS
+    #          = mq * a - (E + v × B)
+    # Dimension of the Phase Flow, in this case 4, then V and X both have a dimension of 2
+    flow_dim = flow_pred.shape[-1]
+    dim = flow_dim // 2
+    
+    # f_loss1(X_p)
+    residual1 = mq[0] * flow_pred_d2[:,-dim:] - (electric_field(flow_pred[:, -dim:]) + magnetic_force(flow_pred_d1[:, -dim:]))
+    # f_loss2(V_p)
+    residual2 = mq[0] * flow_pred_d1[:,:dim] - (electric_field(flow_pred[:, -dim:]) + magnetic_force(flow_pred[:, :dim]))
+    
+    return residual1, residual2, flow_pred, flow_pred_d1, flow_pred_d2
+
+
+'''
+PINN Total Loss for Phase Flows
+'''
+def total_PINN_pfLoss(params, mq, t, flow_true,\
+                    lb, ub, lamda = (1.0, 1.0, 1.0)):
+    '''
+    Total Loss for PINN that Predicts Phase Flow (**Difficult to Design**)
+    *** Check f_lorentzPhaseFlow for details ***
+    For (V_t, X_t) = flow_true ; (V_p, X_p) = flow_pred
+    
+        - pf_loss                        : MSE(flow_pred, flow_true) * lamda0
+        - f_loss1 * lamda1               : based on X_p
+        - f_loss2 * lamda2               : based on V_p
+        - approx_loss                    : MSE(V_p, X_p') * lamda0
+    '''
+    # Dimension of the Phase Flow, in this case 4, then V and X both have a dimension of 2
+    flow_dim = flow_true.shape[-1]
+    dim = flow_dim // 2
+    
+    residual1, residual2, flow_pred, flow_pred_d1, flow_pred_d2 = f_lorentzPhaseFlow(params, mq, t, lb, ub)
+    # Unpack the weights for the losses
+    lamda_pf, lamda_f1, lamda_f2 = lamda
+    
+    pf_loss = jnp.mean(jnp.sum((flow_pred - flow_true) ** 2, axis = 1))
+    
+    f_loss1 = jnp.mean(jnp.sum(residual1 ** 2, axis = 1))
+    
+    f_loss2 = jnp.mean(jnp.sum(residual2 ** 2, axis = 1))
+    
+    approx_loss = jnp.mean(
+                    jnp.sum((flow_pred[:, :dim] - flow_pred_d1[:, -dim:]) ** 2, axis = 1)
+                    )
+    
+    return lamda_pf * (pf_loss + approx_loss) + lamda_f1 * f_loss1 + lamda_f2 * f_loss2,\
+            (pf_loss, f_loss1, f_loss2, approx_loss)
