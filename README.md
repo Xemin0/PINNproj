@@ -19,6 +19,9 @@ python3 train_PINN.py --inverseprob True --savefig True --savemodel True --lamda
 python3 train_AdPINN.py --inverseprob True --savefig True --savemodel True --lamda 5.0,5.0,1.0 --lbfgs 1 --adam 7000 
 ```
 3. Run locally by PINN that predicts the Phase Flow instead of just the spatial locations
+```
+python3 train_pfPINN.py --inverseprob True --adtrain False --savefig True --savemodel True --lamda 5.0,5.0,1.0 --lbfgs 1 --adam 7000 
+```
 4. Run on Oscar with SLURM script `pinn.sh`
 
 # About the Project
@@ -53,7 +56,7 @@ PINN is essentially a DeepLearning based method. Itself does not strictly abides
 2. **Excluding the Singularity at the Origin**. The electric field is is not completely 'source-less' - its magnitude along with the potential value will go to infinity at the origin. Unlike numerical methods (i.g. ODE solver, integrator, Picard Iteration etc.), PINN won't be able to handle this abnormality (`nan`$*n =$`nan` just as $0 * n = n$??). Some possible solutions might be:    - Initialize the network's biases as non-zeros to avoid initial spatial values at origin
     - Value Clipping: replace zero state ($X = [0,0]$ - rows with all zeros) in the input with $epsilon = 1e-7$ (Must be differentiable for backpropogation; Better be Jittable for performances)
 However these still do not prevent the predictions of $X$ from approaching zeros. It may suggest that there should be a stronger constraints or penalty term to stop PINN from predicting trajectories that go through the origin
-3. **Determining the Learning Rates for the Adversarial Training Process(if chosen to be added)** For the Adversarial Training in the Inverse problem, we convert the original Minimization problem to a Min-Max problem by using two optimizers. One updates the model's parameters by *Minimizing* the total loss, while the other updates the $mq$ (Mass-to-Charge Ratio) by **Maximizing** the residual loss(f_loss1 and f_loss2). Then the question leaves to deteriming the respective learning rate, as the adversarial training process is difficult to converge.
+3. **Determining the Learning Rates for the Adversarial Training Process(if chosen to be added)** For the Adversarial Training in the Inverse problem, we convert the original Minimization problem to a Min-Max problem by using two optimizers. One updates the model's parameters by *Minimizing* the total loss, while the other updates the $mq$ (Mass-to-Charge Ratio) by *Maximizing* the residual loss(f_loss1 and f_loss2). Then the question leaves to deteriming the respective learning rate, as the adversarial training process is difficult to converge.
 4. **Determining the Weights for the Sum of the Loss Terms**. Now this PINN has 4 different loss terms
         - pf_loss                        : MSE(flow_pred, flow_true) * lamda0
         - f_loss1 * lamda1               : based on X_p
