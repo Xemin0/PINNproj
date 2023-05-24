@@ -265,7 +265,7 @@ def plot_trajectory_PINN(x_net, params, t, x_data,\
     plt.title('Predicted MSE Loss v.s. Time')
     
         
-    np.save('PINNloss', np.array(MSE_losses))
+    np.save('./PredictedLosses/PINNloss', np.array(MSE_losses))
     
     if savefig:
         plt.savefig(text + '.pdf')
