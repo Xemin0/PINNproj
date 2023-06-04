@@ -71,7 +71,8 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 ## Possible Further Improvements
 1. Increasing network's depth or width.
 2. Incorporate [Self Adaptive Weights](https://github.com/levimcclenny/SA-PINNs) for different loss terms (in Point 4; The original SA-PINN could be improved?).
-3. Handling issues addressed above (2 - 4)
+3. Compare the Adversarial Training with [Actor Critic(Pytorch)](https://github.com/yc930401/Actor-Critic-pytorch); More resources and references inside the link.
+4. Handling issues addressed above (2 - 4)
 
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
 |PINN Predictions and Losses | PNN Predictions and Loss|
