@@ -25,6 +25,8 @@ python3 train_pfPINN.py --inverseprob True --adtrain False --savefig True --save
 4. Run on Oscar with SLURM script `pinn.sh`
 
 # About the Project
+[The Reference Paper on Poisson Neural Networks(PNNs)](https://ieeexplore.ieee.org/document/9716789)
+
 Primarily uses `SympNets`, `PNNs`, `PINNs` (will only provide `PINN part` in this repo, refer to [Pengzhan Jin's `Learner` Module(PyTorch)](https://github.com/jpzxshi/learner) for `SympNet` and `PNN`; Modified to include more optimizers, i.g. L-BFGS and loading utilities) to predict future states (within a plane, a special case) of a charged particle in an electro-magnetic field, whose motion is governed by the Lorentz Force:
 $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
@@ -43,8 +45,8 @@ $$E(X) = -(\nabla \phi)(X) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{
 ## About PINN for this Task
 Since PINN is essentially an approximation to a function governed by a system of PDEs or ODEs, and we are expected to predict the charged particle's phase flow(spatial location in terms of time), here we will use a linear neural network (based on [Universal Approximation Theorem](https://en.wikipedia.org/wiki/Universal_approximation_theorem)) that uses time $t$ as input and phase flow $Z$ as output to approximate the trajectory of interest, i.e. $$\mathcal{N}(t) \approx Z(t)$$
 With initial conditions:
-$$\begin{align*}\dot{X}(0) &= V_0 \\
-                X(0)  &= X_0\end{align*}$$
+$$\begin{align}\dot{X}(0) &= V_0 \\
+                X(0)  &= X_0\end{align}$$
 and the Physics Equation (Lorentz force)
 $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
