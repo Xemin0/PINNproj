@@ -67,7 +67,8 @@ However these still do not prevent the predictions of $X$ from approaching zeros
     - $\mathcal{L} _{approx} \quad$                    : MSE($V_p$ , $X_p$') $\cdot \lambda _0$
 
 
-    It's difficult to balance the influences among these terms (as the yielded results are not desireable, and the model itself is difficult to fine-tune)
+
+It's difficult to balance the influences among these terms (as the yielded results are not desireable, and the model itself is difficult to fine-tune)
 
 
 ## Possible Further Improvements
