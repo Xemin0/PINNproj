@@ -90,7 +90,7 @@ The original Actor-Critic Model was designed to improve stability in training, b
 - Consider the Physics Equation (Lorentz Force in this case) as the 'critic'
 
 *The actual parameters' update scheme is still to-be-determined. A naive design would be:*
-1. Update the model's trainable parameters by *minimizing* the Total Loss, while *freezing* the unknown coefficient $mq$
+1. Update the model's trainable parameters by *minimizing* the Total Loss, while *freezing* the unknown coefficient $mq$, or *freezing* the predicted Phase Flow
 2. Update the unknown coefficient $mq$ by *minimizing* the Residual Loss, where the 'Baseline' in this caseis implied in the given Physics Equation (Lorentz Force)
 
 *However, this naive attempt might not rule out the possible 'Vanishing Gradient' Problem or a Mode Collapse indicated in the original SA-PINN paper, where the unknown coefficient $mq$ will always be picked by the model to minimize the Residual Loss yielding extremely small gradients or simply suboptimal $mq$ values.*
