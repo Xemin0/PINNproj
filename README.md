@@ -61,7 +61,7 @@ PINN is essentially a DeepLearning based method. Itself does not strictly abides
 However these still do not prevent the predictions of $X$ from approaching zeros. It may suggest that there should be a stronger constraints or penalty term to stop PINN from predicting trajectories that go through the origin
 3. **Determining the Learning Rates for the Adversarial Training Process(if chosen to be added)** For the Adversarial Training in the Inverse problem, we convert the original Minimization problem to a Min-Max problem by using two optimizers. One updates the model's parameters by *Minimizing* the total loss, while the other updates the $mq$ (Mass-to-Charge Ratio) by *Maximizing* the residual loss(f_loss1 and f_loss2). Then the question leaves to determining the respective learning rate, as the adversarial training process is difficult to converge.
 4. **Determining the Weights for the Sum of the Loss Terms**. Now this PINN has 4 different loss terms
-    - $\mathcal{L} _{pf} \quad                        : \text{MSE}(flow_{pred}, flow_{true}) \cdot \lambda _0$
+    - $L _{pf} \quad$                        : MSE $(flow_{pred}, flow_{true}) \cdot \lambda _0$
     - $\mathcal{L} _{f1} \cdot \lambda_1 \quad$                : Residual Loss based on $X_p$
     - $\mathcal{L} _{f2} \cdot \lambda_2 \quad$                : Residual Loss based on $V_p$
     - $\mathcal{L} _{approx} \quad$                    : MSE($V_p$ , $X_p$') $\cdot \lambda _0$
@@ -82,7 +82,7 @@ Based on current designs, in the inverse problem the model must learn the model'
 
 #### Adversarial Training Procedure
 - Update model's trainable variables by **minimizing** the Total Loss
-- Update the unknown coefficient $mq$ by **maximizing** the Residual Loss (e.g. $\mathcal{L}_{f1}$ and $\mathcal{L}_{f2}$)
+- Update the unknown coefficient $mq$ by **maximizing** the Residual Loss (e.g. $L_{f1}$ and $L_{f2}$)
 
 #### Actor-Critic Scheme (From Reinforcement Learning) *Subject to Changes*
 The original Actor-Critic Model was designed to improve stability in training, by providing a baseline that would reduce the variance in the Discounted Reward Funciton (that is substituted by an Advantage Function)
