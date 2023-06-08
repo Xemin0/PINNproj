@@ -62,8 +62,8 @@ However these still do not prevent the predictions of $X$ from approaching zeros
 3. **Determining the Learning Rates for the Adversarial Training Process(if chosen to be added)** For the Adversarial Training in the Inverse problem, we convert the original Minimization problem to a Min-Max problem by using two optimizers. One updates the model's parameters by *Minimizing* the total loss, while the other updates the $mq$ (Mass-to-Charge Ratio) by *Maximizing* the residual loss(f_loss1 and f_loss2). Then the question leaves to determining the respective learning rate, as the adversarial training process is difficult to converge.
 4. **Determining the Weights for the Sum of the Loss Terms**. Now this PINN has 4 different loss terms
     - $\mathcal{L} _{pf} \quad                        : \text{MSE}(flow_{pred}, flow_{true}) \cdot \lambda _0$
-    - $\mathcal{L} _{f1} \cdot \lambda_1 \quad$                : based on $X_p$
-    - $\mathcal{L} _{f2} \cdot \lambda_2 \quad$                : based on $V_p$
+    - $\mathcal{L} _{f1} \cdot \lambda_1 \quad$                : Residual Loss based on $X_p$
+    - $\mathcal{L} _{f2} \cdot \lambda_2 \quad$                : Residual Loss based on $V_p$
     - $\mathcal{L} _{approx} \quad$                    : MSE($V_p$ , $X_p$') $\cdot \lambda _0$
 
 
@@ -76,6 +76,25 @@ It's difficult to balance the influences among these terms (as the yielded resul
 2. Incorporate [Self Adaptive Weights](https://github.com/levimcclenny/SA-PINNs) for different loss terms (in Point 4; The original SA-PINN could be improved?).
 3. Compare the Adversarial Training with [Actor Critic(Pytorch)](https://github.com/yc930401/Actor-Critic-pytorch); More resources and references inside the link.
 4. Handling issues addressed above (2 - 4)
+
+## Comments and Discussion on Adversarial Training v.s. Actor-Critic Scheme for Inverse Problems using PINNs
+Based on current designs, in the inverse problem the model must learn the model's parameters along with the unknown coefficient $mq$ , the Mass-to-Charge Ratio, then
+
+#### Adversarial Training Procedure
+- Update model's trainable variables by **minimizing** the Total Loss
+- Update the unknown coefficient $mq$ by **maximizing** the Residual Loss (e.g. $\mathcal{L}_{f1}$ and $\mathcal{L}_{f2}$)
+
+#### Actor-Critic Scheme (From Reinforcement Learning) *Subject to Changes*
+The original Actor-Critic Model was designed to improve stability in training, by providing a baseline that would reduce the variance in the Discounted Reward Funciton (that is substituted by an Advantage Function)
+- Consider the unknown coefficient $mq$ or the Phase Flow(Data) as the 'actor' (though there's no extra network/parametrization to predict this scalar value in this case)
+- Consider the Physics Equation (Lorentz Force in this case) as the 'critic'
+
+*The actual parameters' update scheme is still to-be-determined. A naive design would be:*
+1. Update the model's trainable parameters by *minimizing* the Total Loss, while *freezing* the unknown coefficient $mq$
+2. Update the unknown coefficient $mq$ by *minimizing* the Residual Loss, where the 'Baseline' in this caseis implied in the given Physics Equation (Lorentz Force)
+
+*However, this naive attempt might not rule out the possible 'Vanishing Gradient' Problem or a Mode Collapse indicated in the original SA-PINN paper, where the unknown coefficient $mq$ will always be picked by the model to minimize the Residual Loss yielding extremely small gradients or simply suboptimal $mq$ values.*
+
 
 ## Results Between Physics-Informed Neural Network(3000 Adam + 1 L-BFGS) and Poisson Neural Network (5000 Adam + 1 L-BFGS)
 |PINN Predictions and Losses | PNN Predictions and Loss|
