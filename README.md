@@ -59,6 +59,7 @@ PINN is essentially a DeepLearning based method. Itself does not strictly abides
     - Initialize the network's biases as non-zeros to avoid initial spatial values at origin
     - Value Clipping: replace zero state ($X = [0,0]$ - rows with all zeros) in the input with $epsilon = 1e-7$ (Must be differentiable for backpropogation; Better be Jittable for performances)
 However these still do not prevent the predictions of $X$ from approaching zeros. It may suggest that there should be a stronger constraints or penalty term to stop PINN from predicting trajectories that go through the origin
+    - [Mollification](https://en.wikipedia.org/wiki/Mollifier): A typical technique to 'smooth out' harsh boundaries (spikes at singularity in this problem) by convoluting the boundary with a special smooth function.
 3. **Determining the Learning Rates for the Adversarial Training Process(if chosen to be added)** For the Adversarial Training in the Inverse problem, we convert the original Minimization problem to a Min-Max problem by using two optimizers. One updates the model's parameters by *Minimizing* the total loss, while the other updates the $mq$ (Mass-to-Charge Ratio) by *Maximizing* the residual loss($L_{f1}$ and $L_{f2}$). Then the question leaves to determining the respective learning rate, as the adversarial training process is difficult to converge.
 4. **Determining the Weights for the Sum of the Loss Terms**. Now this PINN has 4 different loss terms
     - $L_{pf}\quad$                        : MSE ($flow_{pred}, flow_{true}$) $\cdot \lambda _0$
