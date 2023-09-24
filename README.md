@@ -54,6 +54,7 @@ $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
 ## Challenges
 PINN is essentially a DeepLearning based method. Itself does not strictly abides by the Physics Laws, therefore conventional analytical and numerical techniques to solve the ODE (dynamics) may not apply. Some issues and challenges in applying PINN to this specific problem include:
+0. **Periodicity in the Phase Flow?**. The given trajectory somewhat looks like a [Lissajous Curve](https://en.wikipedia.org/wiki/Lissajous_curve), but it is not. Thus periodic featuring (i.g. defining the input as a periodic function to help with the training/approximation) may not work.
 1. **Computing Elementwise Derivatives (up to the Second Order)**. Different implementations(auto-diff function wrappers) are included in the `utils.auto_diff` module. Upon preliminary evaluations of performances and costs, `vmap` + reshape is chosen over the handcrafted Hessian Vector Product that uses Forward-over-Reverse mode.
 2. **Excluding the Singularity at the Origin**. The electric field is is not completely 'source-less' - its magnitude along with the potential value will go to infinity at the origin. Unlike numerical methods (i.g. ODE solver, integrator, Picard Iteration etc.), PINN won't be able to handle this abnormality (`nan`$*n =$`nan` just as $0 * n = n$??). Some possible solutions might be:    
     - Initialize the network's biases as non-zeros to avoid initial spatial values at origin
