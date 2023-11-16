@@ -53,7 +53,7 @@ $$X(0) = X_0$$
 and the Physics Equation (Lorentz force)
 $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
-**Here, we will use an MLP of 8 hidden layers for 30 neurons each, input size 1 and output size at 4**
+**Here, we will use an MLP of 8 hidden layers each of 30 neurons, with input size of 1 and output size of 4**
 
 ## Challenges
 PINN is essentially a DeepLearning based method. Itself does not strictly abides by the Physics Laws, therefore conventional analytical and numerical techniques to solve the ODE (dynamics) may not apply. Some issues and challenges in applying PINN to this specific problem include:
@@ -97,7 +97,7 @@ The original Actor-Critic Model was designed to improve stability in training, b
 
 *The actual parameters' update scheme is still to-be-determined. A naive design would be:*
 1. Update the model's trainable parameters by *minimizing* the Total Loss, while *freezing* the unknown coefficient $mq$, or *freezing* the predicted Phase Flow
-2. Update the unknown coefficient $mq$ by *minimizing* the Residual Loss, where the 'Baseline' in this caseis implied in the given Physics Equation (Lorentz Force)
+2. Update the unknown coefficient $mq$ by *minimizing* the Residual Loss, where the 'Baseline' in this case is implied in the given Physics Equation (Lorentz Force)
 
 *However, this naive attempt might not rule out the possible 'Vanishing Gradient' Problem or a Mode Collapse indicated in the original SA-PINN paper, where the unknown coefficient $mq$ will always be picked by the model to minimize the Residual Loss yielding extremely small gradients or simply suboptimal $mq$ values.*
 
