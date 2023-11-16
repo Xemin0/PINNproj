@@ -45,8 +45,11 @@ $$E(X) = -(\nabla \phi)(X) = \frac{(x_1, x_2, 0)}{100 (x_1^2 + x_2^2)^{\frac{3}{
 ## About PINN for this Task
 Since PINN is essentially an approximation to a function governed by a system of PDEs or ODEs, and we are expected to predict the charged particle's phase flow(spatial location in terms of time), here we will use a linear neural network (based on [Universal Approximation Theorem](https://en.wikipedia.org/wiki/Universal_approximation_theorem)) that uses time $t$ as input and phase flow $Z$ as output to approximate the trajectory of interest, i.e. $$\mathcal{N}(t) \approx Z(t)$$
 With initial conditions:
-$$\begin{align}\dot{X}(0) &= V_0 \\
-                X(0)  &= X_0\end{align}$$
+~$$\begin{align}\dot{X}(0) &= V_0 \\
+                X(0)  &= X_0\end{align}$$~
+$$\dot{X}(0) = V_0$$
+$$X(0) = X_0$$
+
 and the Physics Equation (Lorentz force)
 $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
@@ -54,6 +57,7 @@ $$m\ddot{X} = q(E + \dot{X}\times B)$$
 
 ## Challenges
 PINN is essentially a DeepLearning based method. Itself does not strictly abides by the Physics Laws, therefore conventional analytical and numerical techniques to solve the ODE (dynamics) may not apply. Some issues and challenges in applying PINN to this specific problem include:
+
 0. **Periodicity in the Phase Flow?**. The given trajectory somewhat looks like a [Lissajous Curve](https://en.wikipedia.org/wiki/Lissajous_curve), but it is not. Thus periodic featuring (i.g. defining the input as a periodic function to help with the training/approximation) may not work.
 1. **Computing Elementwise Derivatives (up to the Second Order)**. Different implementations(auto-diff function wrappers) are included in the `utils.auto_diff` module. Upon preliminary evaluations of performances and costs, `vmap` + reshape is chosen over the handcrafted Hessian Vector Product that uses Forward-over-Reverse mode.
 2. **Excluding the Singularity at the Origin**. The electric field is is not completely 'source-less' - its magnitude along with the potential value will go to infinity at the origin. Unlike numerical methods (i.g. ODE solver, integrator, Picard Iteration etc.), PINN won't be able to handle this abnormality (`nan`$*n =$`nan` just as $0 * n = n$??). Some possible solutions might be:    
