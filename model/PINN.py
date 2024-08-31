@@ -45,7 +45,7 @@ def total_PINN_loss(all_params, t, v_true, x_true,\
     
     x_loss = jnp.mean(jnp.sum((x_pred - x_true) ** 2, axis = 1))
     
-    v_loss = jnp.mean(jnp.sum((x_pred - x_true) ** 2, axis = 1))
+    v_loss = jnp.mean(jnp.sum((v_pred - v_true) ** 2, axis = 1))
     
     f_loss = jnp.mean(jnp.sum(residual ** 2, axis = 1) )
     
